@@ -1,0 +1,10 @@
+There are multiple kinds of views that we can use:
+    View Params:
+        mStandings- An array including away/home, gamesPlayed, teamID, totalPoints, and matchupPeriodID 
+        mTeam
+        mBoxScore
+        mRoster
+        mSettings
+        mSchedule
+        player_wl
+        kona_player_info
