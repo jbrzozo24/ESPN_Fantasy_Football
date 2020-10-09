@@ -23,14 +23,27 @@ class League(object):
         self.player_dict={}
         self.years_dict= self.config(years)
         self.SWID= swid
-        self.espn_s2=espn_s2
+        self.espn_s2= espn_s2
 
-        self.dumpPath= self.configPath()
+        self.dumpPath= self.configPath() #Create a path to dump files
+
+        try:
+            self.cookieFile= open(str(self.leagueID)+"-Cookies.txt", "r")
+            if self.cookieFile.readlines == []:
+                raise Exception()
+            self.cookieFile.close()
+        except:
+            name= os.path.join(self.dumpPath, str(self.leagueID)+"-Cookies.txt")
+            self.cookieFile= open(name, "w+")
+            self.SWID= "{some string}" #input("Provide your SWID key as a string:")
+            self.espn_s2="{some other string}" #input("Provide your espn_s2 cookie as a string:")
+
 
         
     def config(self, years):
         return 0
 
+    #Returns a path to save generated files
     def configPath(self): 
         curPath=os.getcwd()
         i=curPath.rfind("\\") #get the last index where the '\' character in encountered
@@ -38,3 +51,6 @@ class League(object):
             newPath=curPath[:i]
         else:
             newPath=curPath 
+        #return newPath 
+        return curPath
+

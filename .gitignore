@@ -3,4 +3,7 @@
 #=========================================================================
 
 #Ignore cookies file
-cookies.txt
+*cookies.txt
+*Test.py
+__pycache__/
+.pytest_cache/

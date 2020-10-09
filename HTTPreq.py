@@ -7,6 +7,8 @@ APIurl= ''
 
 SWID = ''
 espn_s2 = ''
+
+
 #Sets the URL to be scraped according to the year
 def setURL(year, id):
     #URL = URL + 'https://fantasy.espn.com/football/league/standings?leagueId=143434&seasonId=' +str(year)
