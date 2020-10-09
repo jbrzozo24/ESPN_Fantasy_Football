@@ -8,3 +8,19 @@ There are multiple kinds of views that we can use:
         mSchedule
         player_wl
         kona_player_info
+
+    View params in detail:
+        mstandings format:
+            {"draftDetail":
+                {"drafted":true,"inProgress":false},
+                    "gameId":1,"id":143434,
+                        "schedule":
+                            [{"away":{"gamesPlayed":0,"teamId":5,"totalPoints":125.96},
+                            "home":{"gamesPlayed":0,"teamId":1,"totalPoints":155.28},"matchupPeriodId":1},
+                            {"away":{"gamesPlayed":0,"teamId":6,"totalPoints":153.14},
+                            "home":{"gamesPlayed":0,"teamId":4,"totalPoints":139.5}, "matchupPeriodId":1}]
+
+            For one particular league, there are 13 matchup weeks and six matchups per week as the league has 12 teams.
+        
+        mTeam format:
+            
