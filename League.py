@@ -21,36 +21,58 @@ class League(object):
     def __init__(self, leagueID, years=[],swid=None, espn_s2=None):
         self.leagueID=leagueID
         self.player_dict={}
-        self.years_dict= self.config(years)
+        self.years_dict= years #make this into a dictionary with values as https links, keys as years
         self.SWID= swid
         self.espn_s2= espn_s2
-
         self.dumpPath= self.configPath() #Create a path to dump files
 
         try:
             self.cookieFile= open(str(self.leagueID)+"-Cookies.txt", "r")
-            if self.cookieFile.readlines == []:
-                raise Exception()
-            self.cookieFile.close()
+            if self.cookieFile.readlines() == []:
+                self.cookieFile.close()
+                self.configCookies(str(self.leagueID)+"-Cookies.txt")
+            else:
+                self.cookieFile.close()
+                self.cookieFile = open(str(self.leagueID)+"-Cookies.txt", "r")
+                self.SWID = self.cookieFile.readline()
+                self.SWID = self.SWID[:-1]
+                self.espn_s2 = self.cookieFile.readline()
+                self.cookieFile.close()
         except:
-            name= os.path.join(self.dumpPath, str(self.leagueID)+"-Cookies.txt")
-            self.cookieFile= open(name, "w+")
-            self.SWID= "{some string}" #input("Provide your SWID key as a string:")
-            self.espn_s2="{some other string}" #input("Provide your espn_s2 cookie as a string:")
+            self.configNewCookies()
 
 
+
+    #Configure a Cookies File that already exists, but has no/incorrect data in it  
+    def configCookies(self, filename):
+        self.cookieFile= open(filename, "w+")
+        self.SWID=input("Provide your SWID key as a string (include {}):")
+        self.espn_s2=input("Provide your espn_s2 cookie as a string:")
+        self.cookieFile.write(self.SWID+"\n")
+        self.cookieFile.write(self.espn_s2)
+        self.cookieFile.close()
+
+    #Configure a New Cookies File
+    def configNewCookies(self):
+        filename= os.path.join(self.dumpPath, str(self.leagueID)+"-Cookies.txt")
+        self.configCookies(filename)
+        # self.cookieFile= open(name, "w+")
+        # self.SWID= input("Provide your SWID key as a string (include {}):")
+        # self.espn_s2= input("Provide your espn_s2 cookie as a string:")
+        # self.cookieFile.write(self.SWID+"\n")
+        # self.cookieFile.write(self.espn_s2)
+        # self.cookieFile.close()
         
-    def config(self, years):
-        return 0
 
     #Returns a path to save generated files
     def configPath(self): 
-        curPath=os.getcwd()
-        i=curPath.rfind("\\") #get the last index where the '\' character in encountered
-        if i != -1:
-            newPath=curPath[:i]
-        else:
-            newPath=curPath 
-        #return newPath 
-        return curPath
+        return os.getcwd()
 
+    def configYears(self, yearList):
+        yeardict= {}
+        for year in yearList:
+            if year != 2020: 
+                yeardict.update({year: "https://fantasy.espn.com/apis/v3/games/ffl/leagueHistory/"+str(self.leagueID)+"?seasonId="+str(year)})
+            else:
+                yeardict.update({year: "https://fantasy.espn.com/apis/v3/games/ffl/seasons/"+str(year)+"/segments/0/leagues/"+str(self.leagueID)})
+        return yeardict
