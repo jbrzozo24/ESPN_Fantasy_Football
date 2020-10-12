@@ -18,10 +18,10 @@ The League Class.
 
 """
 class League(object):
-    def __init__(self, leagueID, years=[],swid=None, espn_s2=None):
+    def __init__(self, leagueID, yearlist=[],swid=None, espn_s2=None):
         self.leagueID=leagueID
         self.player_dict={}
-        self.years_dict= years #make this into a dictionary with values as https links, keys as years
+        self.years= self.configYears(yearlist)
         self.SWID= swid
         self.espn_s2= espn_s2
         self.dumpPath= self.configPath() #Create a path to dump files
@@ -68,6 +68,7 @@ class League(object):
     def configPath(self): 
         return os.getcwd()
 
+    #Returns a dictionary of years and the associated links with them
     def configYears(self, yearList):
         yeardict= {}
         for year in yearList:
@@ -76,3 +77,10 @@ class League(object):
             else:
                 yeardict.update({year: "https://fantasy.espn.com/apis/v3/games/ffl/seasons/"+str(year)+"/segments/0/leagues/"+str(self.leagueID)})
         return yeardict
+
+    #Returns the contents of the mStandings param page
+    def getmStandings(self, year):
+        url= self.years.get(year) + "?view=mStandings"
+        r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json() 
+        # print(r)
+        return r
