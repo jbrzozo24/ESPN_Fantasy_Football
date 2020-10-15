@@ -40,8 +40,10 @@ class League(object):
         except:
             self.configNewCookies()
 
-        self.player_dict=self.configPlayers(2020)
-        print(self.player_dict)
+        temp= self.configPlayers(2020)
+        self.player_dict=temp[0]
+        self.player_array=temp[1]
+        
 
 
 
@@ -73,14 +75,20 @@ class League(object):
                 yeardict.update({year: "https://fantasy.espn.com/apis/v3/games/ffl/seasons/"+str(year)+"/segments/0/leagues/"+str(self.leagueID)})
         return yeardict
 
+
+    #Returns a tuple containing a dictionary with all the player objects, and an array of all the dictionary keys
     def configPlayers(self, year):  #Make the keys all lowercase with one space between first and last time
         playerdict= {}
+        playerArray=[]
         mTeam= self.getmTeam(year)
         teamArray= mTeam.get("members")
         for userDict in teamArray:
-            playerdict.update({userDict.get('firstName')+' '+ userDict.get('lastName'): Player(userDict.get('firstName'), userDict.get('lastName'), userDict.get('id'))})
-        print(playerdict.get('jack brzozowski').firstname)
-        return playerdict
+            name=(userDict.get('firstName')+' '+userDict.get('lastName'))
+            name=self.makeName(name)
+            playerArray.append(name) 
+            playerdict.update({name: Player(userDict.get('firstName'), userDict.get('lastName'), userDict.get('id'))})
+        print(playerdict.get('jack brzozowski'))
+        return (playerdict, playerArray)
 
     #Returns the contents of the mStandings param page
     def getmStandings(self, year):
@@ -117,6 +125,14 @@ class League(object):
         url= self.years.get(year) + "?view=player_wl"
         r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
         return r
+
+
+    #Converts the name of the team owner to a more standardized format
+    def makeName(self, string):
+        string=string.lower()
+        i= string.find(' ')
+        strings= string[:i+1] + string[i+1:].strip()
+        return strings
 
     
 
