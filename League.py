@@ -20,7 +20,6 @@ The League Class.
 class League(object):
     def __init__(self, leagueID, yearlist=[],swid=None, espn_s2=None):
         self.leagueID=leagueID
-        self.player_dict={}
         self.years= self.configYears(yearlist)
         self.SWID= swid
         self.espn_s2= espn_s2
@@ -41,6 +40,9 @@ class League(object):
         except:
             self.configNewCookies()
 
+        self.player_dict=self.configPlayers(2020)
+        print(self.player_dict)
+
 
 
     #Configure a Cookies File that already exists, but has no/incorrect data in it  
@@ -55,14 +57,7 @@ class League(object):
     #Configure a New Cookies File
     def configNewCookies(self):
         filename= os.path.join(self.dumpPath, str(self.leagueID)+"-Cookies.txt")
-        self.configCookies(filename)
-        # self.cookieFile= open(name, "w+")
-        # self.SWID= input("Provide your SWID key as a string (include {}):")
-        # self.espn_s2= input("Provide your espn_s2 cookie as a string:")
-        # self.cookieFile.write(self.SWID+"\n")
-        # self.cookieFile.write(self.espn_s2)
-        # self.cookieFile.close()
-        
+        self.configCookies(filename)   
 
     #Returns a path to save generated files
     def configPath(self): 
@@ -78,9 +73,66 @@ class League(object):
                 yeardict.update({year: "https://fantasy.espn.com/apis/v3/games/ffl/seasons/"+str(year)+"/segments/0/leagues/"+str(self.leagueID)})
         return yeardict
 
+    def configPlayers(self, year):  #Make the keys all lowercase with one space between first and last time
+        playerdict= {}
+        mTeam= self.getmTeam(year)
+        teamArray= mTeam.get("members")
+        for userDict in teamArray:
+            playerdict.update({userDict.get('firstName')+' '+ userDict.get('lastName'): Player(userDict.get('firstName'), userDict.get('lastName'), userDict.get('id'))})
+        print(playerdict.get('jack brzozowski').firstname)
+        return playerdict
+
     #Returns the contents of the mStandings param page
     def getmStandings(self, year):
         url= self.years.get(year) + "?view=mStandings"
-        r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json() 
-        # print(r)
+        r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
         return r
+
+    def getmRoster(self, year):
+        url= self.years.get(year) + "?view=mRoster"
+        r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
+        return r
+
+    def getmBoxScore(self, year): 
+        url= self.years.get(year) + "?view=mBoxScore"
+        r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
+        return r
+
+    def getmTeam(self, year):
+        url= self.years.get(year) + "?view=mTeam"
+        r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
+        return r 
+
+    def getmSettings(self, year):
+        url= self.years.get(year) + "?view=mSettings"
+        r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
+        return r
+
+    def getmSchedule(self, year):
+        url= self.years.get(year) + "?view=mSchedule"
+        r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
+        return r
+
+    def getplayer_wl(self, year):
+        url= self.years.get(year) + "?view=player_wl"
+        r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
+        return r
+
+    
+
+
+
+
+class Player(object):
+    def __init__(self, firstname, lastname, longID):
+        self.firstname=firstname
+        self.lastname=lastname
+        self.longID=longID
+
+
+myLeague= League(143434, [2018,2019,2020])
+# print(myLeague.SWID)
+# print(myLeague.espn_s2)
+# print(myLeague.getmStandings(2020))
+# print(myLeague.getmTeam(2020))
+# myLeague.configPlayers(2020)
