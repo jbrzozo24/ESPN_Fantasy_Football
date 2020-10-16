@@ -2,6 +2,8 @@ import pandas
 import requests
 import datetime 
 import os
+import numpy as np
+from Player import *
 
 
 """
@@ -9,12 +11,14 @@ The League Class.
     This class describes the league in question
     Attributes:
         leagueID: the ID of this league
-        player_dict: A dictionary of players in this league
-            Keys: Player name (string) Value: The Player object (sub-class of league)
-        years[]: a list of the years this league has been active
+        years[]: a dictionary with keys of all the years this league has been active, and the value is the base URL for the espn API
         swid: the swid cookie of the user in this league            #used for logging in purposes
         espn_s2: the espn_s2 cookie of the user in this league      #used for logging in purposes
         dumpPath: the path that will be used to dump the cookies file
+        cookieFile: a text file with the cookies associated with the fantasy account
+        player_dict: A dictionary of players in this league
+            Keys: Player name (string) Value: The Player object (sub-class of league)
+        player_array: an array of player names, which corresponds to the dictionary keys in the player_dict
 
 """
 class League(object):
@@ -43,6 +47,8 @@ class League(object):
         temp= self.configPlayers(2020)
         self.player_dict=temp[0]
         self.player_array=temp[1]
+        self.linkTeamID()
+        print('TeamID: ' + str(self.player_dict.get('jack brzozowski').teamID))
         
 
 
@@ -86,9 +92,15 @@ class League(object):
             name=(userDict.get('firstName')+' '+userDict.get('lastName'))
             name=self.makeName(name)
             playerArray.append(name) 
-            playerdict.update({name: Player(userDict.get('firstName'), userDict.get('lastName'), userDict.get('id'))})
-        print(playerdict.get('jack brzozowski'))
+            playerdict.update({name: Player(userDict.get('firstName'), userDict.get('lastName'), userDict.get('id'), userDict.get('displayName'))})
+            playerdict.update({userDict.get('id'): playerdict.get(name)})  #make the player obtainable by longID as well, not just name
         return (playerdict, playerArray)
+
+
+
+#===================================================================================================
+# Various Getters for different ESPN view HTTP requests
+#===================================================================================================
 
     #Returns the contents of the mStandings param page
     def getmStandings(self, year):
@@ -127,6 +139,10 @@ class League(object):
         return r
 
 
+#=============================================================================================
+# Helper Functions
+#=============================================================================================
+
     #Converts the name of the team owner to a more standardized format
     def makeName(self, string):
         string=string.lower()
@@ -134,19 +150,54 @@ class League(object):
         strings= string[:i+1] + string[i+1:].strip()
         return strings
 
+    def linkTeamID(self):
+        mBoxScore= self.getmBoxScore(2020)
+        for team in mBoxScore.get('teams'):
+            for owner in team.get('owners'):
+                print("This Owner: "+self.player_dict.get(owner).firstname+' '+self.player_dict.get(owner).lastname)
+                self.player_dict.get(owner).setteamID(team.get('id'))
+        
+        
+    
+# thisScores=[
+#           [123, 123, 86, 104, 0, 0, 0, 0,...],  #this has teamID 1
+#           [114, 146, 98, 123, 0, 0, 0, 0,...],  #this has teamID 2 ..
+#           [                              ...],
+#           [                              ...] ]
+
+    def makeScoreArray(self,year):
+        mStandings=self.getmStandings(year)
+        status=mStandings.get('status')
+        #make array of scores for the player
+        # print("teamsJoined: "+str(mStandings.get('teamsJoined')))
+        # print("finalScoringPeriod: "+str(mStandings.get('finalScoringPeriod')))
+        thisScores=np.zeros((status.get('teamsJoined'), status.get('finalScoringPeriod')))
+        schedule= mStandings.get("schedule")
+        for game in schedule:
+            week=game.get('matchupPeriodId') - 1
+            away= game.get('away')
+            home= game.get('home')
+            thisScores[away.get('teamId')-1][week]=away.get('totalPoints')
+            thisScores[home.get('teamId')-1][week]=home.get('totalPoints')
+        print(thisScores)
+        return thisScores
+            
+                
+            
+
+
+
+
     
 
 
 
 
-class Player(object):
-    def __init__(self, firstname, lastname, longID):
-        self.firstname=firstname
-        self.lastname=lastname
-        self.longID=longID
+
 
 
 myLeague= League(143434, [2018,2019,2020])
+myLeague.makeScoreArray(2020)
 # print(myLeague.SWID)
 # print(myLeague.espn_s2)
 # print(myLeague.getmStandings(2020))

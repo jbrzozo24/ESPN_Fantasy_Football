@@ -15,7 +15,9 @@ There are multiple kinds of views that we can use:
              "gameId":1,"id":143434,
              "schedule":
                         [{"away":{"gamesPlayed":0,"teamId":5,"totalPoints":125.96},
-                        "home":{"gamesPlayed":0,"teamId":1,"totalPoints":155.28},"matchupPeriodId":1},
+                        "home":{"gamesPlayed":0,"teamId":1,"totalPoints":155.28},
+                        "matchupPeriodId":1},
+                        
                         {"away":{"gamesPlayed":0,"teamId":6,"totalPoints":153.14},
                         "home":{"gamesPlayed":0,"teamId":4,"totalPoints":139.5}, "matchupPeriodId":1}]
             'scoringPeriodId': 5, 'seasonId': 2020, 'segmentId': 0, 
@@ -47,3 +49,38 @@ There are multiple kinds of views that we can use:
                         "id":
                         "lastName":
                         "notificationSettings":}]}
+        
+        mBoxScore format:
+           {"gameId":1,
+            "id":143434,
+            "members":[{"displayName":"kyle4357","id":"{0CAA34CE-48E4-48AD-B8EC-BE687C52540D}","isLeagueManager":false},
+                        {"displayName":"jlebow","id":"{39AA981C-21B7-4B6F-AA98-1C21B7AB6FD8}","isLeagueManager":false},
+                        {"displayName":"espn62642463","id":"{468431EB-B2E9-4148-93DF-FE15D8CB4C16}","isLeagueManager":false},
+                        {"displayName":"DMAC2429","id":"{4689728F-36C2-4ECD-8972-8F36C2FECD8C}","isLeagueManager":false},
+                        {"displayName":"Jasonl2462341","id":"{47BC4275-7739-4D81-8F35-E30BF561BE81}","isLeagueManager":false},
+                        {"displayName":"Kevm19","id":"{60E27AA7-2721-416D-A27A-A72721A16DAD}","isLeagueManager":false},
+                        {"displayName":"slockw2616422","id":"{773BC0F5-362E-440F-B26D-8C1AF8C74950}","isLeagueManager":false},
+                        {"displayName":"ur_homie_orly","id":"{81EAEA75-80FE-40F4-AAEA-7580FEA0F46F}","isLeagueManager":false},
+                        {"displayName":"samvella23","id":"{911BE828-D4FD-4757-9BE8-28D4FDA7570A}","isLeagueManager":false},
+                        {"displayName":"alexmd6938022","id":"{9A5FC019-1D10-452B-BB21-9E13610B72C1}","isLeagueManager":false},
+                        {"displayName":"jbrzozo24","id":"{A0F92C8C-C571-40CA-B92C-8CC571C0CA06}","isLeagueManager":false},
+                        {"displayName":"Benny11221","id":"{B73FD7B6-7FAB-44C5-8C03-9ABE3DE4D198}","isLeagueManager":false},
+                        {"displayName":"Sam81356","id":"{D036CB91-6B23-49D0-B6CB-916B2329D005}","isLeagueManager":false},
+                        {"displayName":"richie870","id":"{FC4B0C8B-E483-4D50-8B0C-8BE483DD502D}","isLeagueManager":false}],
+            "scoringPeriodId":6,
+            "seasonId":2020,
+            "segmentId":0,
+            "settings":{"name":"Kamara so good Ingram so bad"},
+            "status":{"currentMatchupPeriod":6,"isActive":true,"latestScoringPeriod":6},
+            "teams":[{"abbrev":"LUCA","id":1,"location":"Lights Kamara","nickname":"Action","owners":["{FC4B0C8B-E483-4D50-8B0C-8BE483DD502D}"]},
+                    {"abbrev":"TENE","id":2,"location":"K","nickname":"1","owners":["{D036CB91-6B23-49D0-B6CB-916B2329D005}"]},
+                    {"abbrev":"DALY","id":3,"location":"Livin' On A ","nickname":"Thielen","owners":["{9A5FC019-1D10-452B-BB21-9E13610B72C1}"]},
+                    {"abbrev":"BONZ","id":4,"location":"Federicci","nickname":"Cherangabangs","owners":["{0CAA34CE-48E4-48AD-B8EC-BE687C52540D}","{911BE828-D4FD-4757-9BE8-28D4FDA7570A}"]},
+                    {"abbrev":"BRZO","id":5,"location":"Team","nickname":"brzozowski","owners":["{A0F92C8C-C571-40CA-B92C-8CC571C0CA06}"]},
+                    {"abbrev":"MCLA","id":6,"location":"Ingram over ","nickname":"Kamara","owners":["{4689728F-36C2-4ECD-8972-8F36C2FECD8C}","{468431EB-B2E9-4148-93DF-FE15D8CB4C16}"]},
+                    {"abbrev":"BEN","id":7,"location":"Free Guice Til","nickname":"Its Backwards","owners":["{B73FD7B6-7FAB-44C5-8C03-9ABE3DE4D198}"]},
+                    {"abbrev":"JL","id":8,"location":"Clyde yo kids","nickname":"Clyde yo wife","owners":["{39AA981C-21B7-4B6F-AA98-1C21B7AB6FD8}"]},
+                    {"abbrev":"Fly","id":9,"location":"Super Bowl","nickname":"Champs","owners":["{47BC4275-7739-4D81-8F35-E30BF561BE81}"]},
+                    {"abbrev":"CMC","id":10,"location":"White","nickname":"Running Back","owners":["{773BC0F5-362E-440F-B26D-8C1AF8C74950}"]},
+                    {"abbrev":"MAY","id":11,"location":"Wake n","nickname":"Drake","owners":["{60E27AA7-2721-416D-A27A-A72721A16DAD}"]},
+                    {"abbrev":"ECK","id":12,"location":"Rated","nickname":"Ecks","owners":["{81EAEA75-80FE-40F4-AAEA-7580FEA0F46F}"]}]}
