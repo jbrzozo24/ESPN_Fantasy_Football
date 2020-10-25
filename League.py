@@ -4,6 +4,7 @@ import datetime
 import os
 import numpy as np
 from Player import *
+import openpyxl as xl
 
 
 """
@@ -44,13 +45,14 @@ class League(object):
         except:
             self.configNewCookies()
 
+        self.leagueName=''
         temp= self.configPlayers(2020)
         self.player_dict=temp[0]
         self.player_array=temp[1]
         self.linkTeamID()
         print('TeamID: ' + str(self.player_dict.get('jack brzozowski').teamID))
+        self.configExcelFile()
         
-
 
 
     #Configure a Cookies File that already exists, but has no/incorrect data in it  
@@ -95,6 +97,13 @@ class League(object):
             playerdict.update({name: Player(userDict.get('firstName'), userDict.get('lastName'), userDict.get('id'), userDict.get('displayName'))})
             playerdict.update({userDict.get('id'): playerdict.get(name)})  #make the player obtainable by longID as well, not just name
         return (playerdict, playerArray)
+
+
+    def configExcelFile(self):
+        try: 
+            self.openExcel()
+        except:
+            self.createExcel()
 
 
 
@@ -152,6 +161,8 @@ class League(object):
 
     def linkTeamID(self):
         mBoxScore= self.getmBoxScore(2020)
+        self.leagueName= mBoxScore.get('settings').get('name').replace(" ", "")
+        print('LeagueName: ' + self.leagueName)
         for team in mBoxScore.get('teams'):
             for owner in team.get('owners'):
                 print("This Owner: "+self.player_dict.get(owner).firstname+' '+self.player_dict.get(owner).lastname)
@@ -174,7 +185,7 @@ class League(object):
         thisScores=np.zeros((status.get('teamsJoined'), status.get('finalScoringPeriod')))
         schedule= mStandings.get("schedule")
         for game in schedule:
-            week=game.get('matchupPeriodId') - 1
+            week= game.get('matchupPeriodId') - 1
             away= game.get('away')
             home= game.get('home')
             thisScores[away.get('teamId')-1][week]=away.get('totalPoints')
@@ -182,8 +193,35 @@ class League(object):
         print(thisScores)
         return thisScores
             
-                
+    #Create and save an excel workbook
+    def createExcel(self):
+        wb=xl.Workbook() 
+        ws=wb.active
+        ws.title= "Overview"
+        wb.create_sheet("2020") #expand to all seasons later
+        wb.save(os.getcwd()+"\\"+self.leagueName+ ".xlsx")
             
+    def openExcel(self):
+        wb=xl.load_workbook(os.getcwd()+"\\"+self.leagueName+".xlsx")
+        wb.save(os.getcwd()+"\\"+self.leagueName+ ".xlsx")
+
+    def writeScoreArray(self, year):
+        arr= self.makeScoreArray(year)
+        wb=xl.load_workbook(os.getcwd()+"\\"+self.leagueName+".xlsx")
+        ws=wb[str(year)]
+        #Make Teams 
+        for playerName in self.player_array:
+            player= self.player_dict.get(playerName)
+            ws.cell(player.teamID +1,1).value=playerName
+        for i in range(len(arr)):
+            for j in range(len(arr[i])):
+                if i==1:
+                    ws.cell(1, j+2).value="Week "+ str(j+1)
+                ws.cell(i+2,j+2).value=arr[i][j]
+        wb.save(os.getcwd()+"\\"+self.leagueName+".xlsx")
+
+
+        
 
 
 
@@ -197,7 +235,7 @@ class League(object):
 
 
 myLeague= League(143434, [2018,2019,2020])
-myLeague.makeScoreArray(2020)
+myLeague.writeScoreArray(2020)
 # print(myLeague.SWID)
 # print(myLeague.espn_s2)
 # print(myLeague.getmStandings(2020))
