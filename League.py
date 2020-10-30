@@ -231,11 +231,10 @@ class League(object):
 
 
 
-
-
-
-myLeague= League(143434, [2018,2019,2020])
-myLeague.writeScoreArray(2020)
+#Runs this code if this is a script
+if __name__ == '__main__':
+    myLeague= League(143434, [2018,2019,2020])
+    myLeague.writeScoreArray(2020)
 # print(myLeague.SWID)
 # print(myLeague.espn_s2)
 # print(myLeague.getmStandings(2020))

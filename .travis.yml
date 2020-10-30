@@ -1,0 +1,48 @@
+#=========================================================================
+# Travis CI Configuration
+#=========================================================================
+# This file configures Travis CI to automatically run the test for this
+# PyMTL project everytime we do a commit to GitHub.
+
+#------------------------------------------------------------------------
+# VM setup
+#------------------------------------------------------------------------
+
+language: python 
+
+python:
+ - "3.6.5"
+ - "3.9"
+
+
+#------------------------------------------------------------------------
+# install dependencies
+#------------------------------------------------------------------------
+
+install:
+
+ - pip install requests
+ - pip install pandas
+ - pip install openpyxl
+ - pip install pytest
+
+
+#------------------------------------------------------------------------
+# before test runner
+#------------------------------------------------------------------------
+
+before_script:
+
+ # Make build directory
+
+ - mkdir -p build
+ - cd build
+
+#------------------------------------------------------------------------
+# test runner
+#------------------------------------------------------------------------
+
+script:
+ #- py.test --verbose ../testBasic.py
+ - python ../testBasic.py
+ #- python ../lab2_proc/proc_sim_staff_eval.py
