@@ -11,7 +11,7 @@
 language: python 
 
 os: 
- - windows
+ - linux
 
 python:
  - "3.6.5"
