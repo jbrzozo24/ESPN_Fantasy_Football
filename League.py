@@ -114,37 +114,58 @@ class League(object):
     #Returns the contents of the mStandings param page
     def getmStandings(self, year):
         url= self.years.get(year) + "?view=mStandings"
-        r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
+        if (self.SWID == '{}') and (self.espn_s2 == ''):
+            r=requests.get(url).json()
+        else:
+            r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
         return r
 
     def getmRoster(self, year):
         url= self.years.get(year) + "?view=mRoster"
-        r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
+        if (self.SWID == '{}') and (self.espn_s2 == ''):
+            r=requests.get(url).json()
+        else:
+            r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
         return r
 
     def getmBoxScore(self, year): 
         url= self.years.get(year) + "?view=mBoxScore"
-        r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
+        if (self.SWID == '{}') and (self.espn_s2 == ''):
+            r=requests.get(url).json()
+        else:
+            r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
         return r
 
     def getmTeam(self, year):
         url= self.years.get(year) + "?view=mTeam"
-        r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
+        if (self.SWID == '{}') and (self.espn_s2 == ''):
+            r=requests.get(url).json()
+        else:
+            r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
         return r 
 
     def getmSettings(self, year):
         url= self.years.get(year) + "?view=mSettings"
-        r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
+        if (self.SWID == '{}') and (self.espn_s2 == ''):
+            r=requests.get(url).json()
+        else:
+            r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
         return r
 
     def getmSchedule(self, year):
         url= self.years.get(year) + "?view=mSchedule"
-        r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
+        if (self.SWID == '{}') and (self.espn_s2 == ''):
+            r=requests.get(url).json()
+        else:
+            r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
         return r
 
     def getplayer_wl(self, year):
         url= self.years.get(year) + "?view=player_wl"
-        r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
+        if (self.SWID == '{}') and (self.espn_s2 == ''):
+            r=requests.get(url).json()
+        else:
+            r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
         return r
 
 
