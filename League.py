@@ -188,7 +188,10 @@ class League(object):
                 print("This Owner: "+self.player_dict.get(owner).firstname+' '+self.player_dict.get(owner).lastname)
                 self.player_dict.get(owner).setteamID(team.get('id'))
         
-        
+#===================================================================================================================
+#Current Season Excel Functions
+#===================================================================================================================
+
     
 # thisScores=[
 #           [123, 123, 86, 104, 0, 0, 0, 0,...],  #this has phyID 0
@@ -240,7 +243,19 @@ class League(object):
         wb.save(os.getcwd()+"\\"+self.leagueName+".xlsx")
 
 
-        
+#===================================================================================================================
+# Player Specific functions
+#===================================================================================================================
+
+    """
+    What to run with the -p flag
+        @param: player: string of the player to perform the action on"""
+    def dashPscript(self, player):
+        pass
+
+    def playerRecord(self, player):
+        pass
+    
 
 
 
@@ -254,8 +269,3 @@ class League(object):
 if __name__ == '__main__':
     myLeague= League(143434, [2018,2019,2020])
     myLeague.writeScoreArray(2020)
-# print(myLeague.SWID)
-# print(myLeague.espn_s2)
-# print(myLeague.getmStandings(2020))
-# print(myLeague.getmTeam(2020))
-# myLeague.configPlayers(2020)
