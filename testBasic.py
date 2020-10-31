@@ -4,7 +4,7 @@ import sys
 
 
 def main():
-    predSTDIN=[ '{}', '']
+    predSTDIN=[ '{}\r', '\r']
     sys.stdin=predSTDIN
     l= League(164, [2019,2020])
     l.makeScoreArray(2020)
