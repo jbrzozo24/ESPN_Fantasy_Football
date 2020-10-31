@@ -50,7 +50,6 @@ class League(object):
         self.player_dict=temp[0]
         self.player_array=temp[1]
         self.linkTeamID()
-        #print('TeamID: ' + str(self.player_dict.get('jack brzozowski').teamID))
         self.configExcelFile()
         
 
@@ -206,11 +205,10 @@ class League(object):
         
     
 # thisScores=[
-#           [123, 123, 86, 104, 0, 0, 0, 0,...],  #this has teamID 1
-#           [114, 146, 98, 123, 0, 0, 0, 0,...],  #this has teamID 2 ..
+#           [123, 123, 86, 104, 0, 0, 0, 0,...],  #this has phyID 0
+#           [114, 146, 98, 123, 0, 0, 0, 0,...],  #this has phyID 1 ..
 #           [                              ...],
 #           [                              ...] ]
-
     def makeScoreArray(self,year):
         mStandings=self.getmStandings(year)
         status=mStandings.get('status')
