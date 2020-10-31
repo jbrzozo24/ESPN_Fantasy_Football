@@ -58,8 +58,8 @@ class League(object):
     #Configure a Cookies File that already exists, but has no/incorrect data in it  
     def configCookies(self, filename):
         self.cookieFile= open(filename, "w+")
-        self.SWID=input("Provide your SWID key as a string (include {}):")
-        self.espn_s2=input("Provide your espn_s2 cookie as a string:")
+        self.SWID=input("Provide your SWID key as a string (include {}):").rstrip()
+        self.espn_s2=input("Provide your espn_s2 cookie as a string:").rstrip()
         self.cookieFile.write(self.SWID+"\n")
         self.cookieFile.write(self.espn_s2)
         self.cookieFile.close()
