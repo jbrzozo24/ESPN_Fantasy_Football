@@ -117,7 +117,7 @@ class League(object):
         if (self.SWID == '{}') and (self.espn_s2 == ''):
             r=requests.get(url).json()
         else:
-            r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
+            r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
         return r
 
     def getmRoster(self, year):
