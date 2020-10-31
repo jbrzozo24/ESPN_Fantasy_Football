@@ -2,10 +2,25 @@ from League import League
 import os 
 import sys
 
+class MY_STD_IN( object ):
+    def __init__(self, response_list):
+        self.std_in_list = response_list
+        self.std_in_length = len(response_list)
+        self.index = 0
+
+    def readline(self):
+        value = self.std_in_list[self.index]      
+        print value
+        if self.index < self.std_in_length -1:
+            self.index += 1
+        else:
+            self.index = 0
+
+        return value
 
 def main():
     predSTDIN=[ '{}\r', '\r']
-    sys.stdin=predSTDIN
+    sys.stdin=MY_STD_IN(predSTDIN)
     l= League(164, [2019,2020])
     l.makeScoreArray(2020)
     assert 'katie kosciolek' in l.player_array
