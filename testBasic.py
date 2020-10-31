@@ -10,7 +10,7 @@ class MY_STD_IN( object ):
 
     def readline(self):
         value = self.std_in_list[self.index]      
-        print value
+        print(value)
         if self.index < self.std_in_length -1:
             self.index += 1
         else:
