@@ -20,6 +20,7 @@ class Player(object):
         #Initialize these with stubs
         self.teamID=''
         self.scores={}
+        self.phyID=''
 
     
 
@@ -31,3 +32,7 @@ class Player(object):
 
     def setscores(self, year, array):
         self.scores.update({year: array})
+
+    #Returns the physicalID of this player
+    def translate(self):
+        return self.phyID

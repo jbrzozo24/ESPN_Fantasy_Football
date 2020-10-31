@@ -50,7 +50,6 @@ class League(object):
         self.player_dict=temp[0]
         self.player_array=temp[1]
         self.linkTeamID()
-        print('TeamID: ' + str(self.player_dict.get('jack brzozowski').teamID))
         self.configExcelFile()
         
 
@@ -58,8 +57,8 @@ class League(object):
     #Configure a Cookies File that already exists, but has no/incorrect data in it  
     def configCookies(self, filename):
         self.cookieFile= open(filename, "w+")
-        self.SWID=input("Provide your SWID key as a string (include {}):")
-        self.espn_s2=input("Provide your espn_s2 cookie as a string:")
+        self.SWID=input("Provide your SWID key as a string (include {}):").rstrip()
+        self.espn_s2=input("Provide your espn_s2 cookie as a string:").rstrip()
         self.cookieFile.write(self.SWID+"\n")
         self.cookieFile.write(self.espn_s2)
         self.cookieFile.close()
@@ -114,37 +113,58 @@ class League(object):
     #Returns the contents of the mStandings param page
     def getmStandings(self, year):
         url= self.years.get(year) + "?view=mStandings"
-        r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
+        if (self.SWID == '{}') and (self.espn_s2 == ''):
+            r=requests.get(url).json()
+        else:
+            r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
         return r
 
     def getmRoster(self, year):
         url= self.years.get(year) + "?view=mRoster"
-        r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
+        if (self.SWID == '{}') and (self.espn_s2 == ''):
+            r=requests.get(url).json()
+        else:
+            r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
         return r
 
     def getmBoxScore(self, year): 
         url= self.years.get(year) + "?view=mBoxScore"
-        r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
+        if (self.SWID == '{}') and (self.espn_s2 == ''):
+            r=requests.get(url).json()
+        else:
+            r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
         return r
 
     def getmTeam(self, year):
         url= self.years.get(year) + "?view=mTeam"
-        r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
+        if (self.SWID == '{}') and (self.espn_s2 == ''):
+            r=requests.get(url).json()
+        else:
+            r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
         return r 
 
     def getmSettings(self, year):
         url= self.years.get(year) + "?view=mSettings"
-        r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
+        if (self.SWID == '{}') and (self.espn_s2 == ''):
+            r=requests.get(url).json()
+        else:
+            r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
         return r
 
     def getmSchedule(self, year):
         url= self.years.get(year) + "?view=mSchedule"
-        r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
+        if (self.SWID == '{}') and (self.espn_s2 == ''):
+            r=requests.get(url).json()
+        else:
+            r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
         return r
 
     def getplayer_wl(self, year):
         url= self.years.get(year) + "?view=player_wl"
-        r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
+        if (self.SWID == '{}') and (self.espn_s2 == ''):
+            r=requests.get(url).json()
+        else:
+            r= requests.get(url, cookies = {"swid": self.SWID,"espn_s2": self.espn_s2 }).json()
         return r
 
 
@@ -171,11 +191,10 @@ class League(object):
         
     
 # thisScores=[
-#           [123, 123, 86, 104, 0, 0, 0, 0,...],  #this has teamID 1
-#           [114, 146, 98, 123, 0, 0, 0, 0,...],  #this has teamID 2 ..
+#           [123, 123, 86, 104, 0, 0, 0, 0,...],  #this has phyID 0
+#           [114, 146, 98, 123, 0, 0, 0, 0,...],  #this has phyID 1 ..
 #           [                              ...],
 #           [                              ...] ]
-
     def makeScoreArray(self,year):
         mStandings=self.getmStandings(year)
         status=mStandings.get('status')
