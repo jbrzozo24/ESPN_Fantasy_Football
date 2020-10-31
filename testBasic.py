@@ -1,8 +1,11 @@
 from League import League  
 import os 
+import sys
 
 
 def main():
+    predSTDIN=[ '{}', '']
+    sys.stdin=predSTDIN
     l= League(164, [2019,2020])
     l.makeScoreArray(2020)
     assert 'katie kosciolek' in l.player_array

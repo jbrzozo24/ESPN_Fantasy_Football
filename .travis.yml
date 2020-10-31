@@ -25,6 +25,7 @@ python:
 install:
 
  - pip install requests
+ - pip install subprocess
  - pip install pandas
  - pip install openpyxl
  - pip install pytest
