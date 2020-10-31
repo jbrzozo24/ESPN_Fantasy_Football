@@ -33,6 +33,10 @@ class Player(object):
     def setscores(self, year, array):
         self.scores.update({year: array})
 
+
+    def setphyID(self, id):
+        self.phyID=id
+
     #Returns the physicalID of this player
     def translate(self):
         return self.phyID
