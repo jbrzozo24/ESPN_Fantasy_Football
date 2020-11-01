@@ -21,6 +21,11 @@ class Player(object):
         self.teamID=''
         self.scores={}
         self.phyID=''
+        self.wins=None
+        self.ties=None
+        self.losses=None
+        self.ptsFor=None
+        self.ptsAgainst=None
 
     
 

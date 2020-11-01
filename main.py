@@ -23,18 +23,21 @@ import getopt
 
 
 def main(argv,leagueID):
-    print("leagueID: "+str(leagueID))
+    league= League(leagueID,[2020]) #Create this League object
+
     try:
         opts, args = getopt.getopt(argv,"hp:y:",["player=","year="])
     except getopt.GetoptError:
         print("\nInvalid Argument!")
         print ('main.py -p <"firstname lastname">, -y <year>; use "-h" for more help\n')
         sys.exit(2)
+
     for opt, arg in opts:
         if opt == '-h':
             print('\n main.py Arguments: \n\n -p <"firstname lastname"> : This field gives an overview of the team specified by player. Must be a string \n\n -y <year> : Gives an overview of this season in the given league, must be a valid season for this league\n\n')
         elif opt in ('-p', '--player'):
             assert type(arg) == str
+            league.dashPscript(arg) #Call the script for player specific data
         elif opt in ('-y', '--year'):
             assert type(arg) == int
             

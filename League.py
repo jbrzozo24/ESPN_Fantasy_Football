@@ -18,7 +18,7 @@ The League Class.
         dumpPath: the path that will be used to dump the cookies file
         cookieFile: a text file with the cookies associated with the fantasy account
         player_dict: A dictionary of players in this league
-            Keys: Player name (string) Value: The Player object (sub-class of league)
+            Keys: Player name (string) Value: The Player object 
         player_array: an array of player names, which corresponds to the dictionary keys in the player_dict
 
 """
@@ -189,7 +189,27 @@ class League(object):
                 self.player_dict.get(owner).setteamID(team.get('id'))
         
 #===================================================================================================================
-#Current Season Excel Functions
+# Excel Configuration Functions
+#===================================================================================================================
+
+    #Create and save an excel workbook
+    def createExcel(self):
+        wb=xl.Workbook() 
+        ws=wb.active
+        ws.title= "Overview"
+        wb.create_sheet("2020") #expand to all seasons later
+        wb.save(os.getcwd()+"\\"+self.leagueName+ ".xlsx")
+
+    def getWorkbook(self):
+        return xl.load_workbook(os.getcwd()+"\\"+self.leagueName+".xlsx")
+            
+    def openExcel(self):
+        wb=self.getWorkbook()
+        wb.save(os.getcwd()+"\\"+self.leagueName+ ".xlsx")
+    
+
+#===================================================================================================================
+# Season Excel Functions
 #===================================================================================================================
 
     
@@ -214,18 +234,6 @@ class League(object):
             thisScores[home.get('teamId')-1][week]=home.get('totalPoints')
         print(thisScores)
         return thisScores
-            
-    #Create and save an excel workbook
-    def createExcel(self):
-        wb=xl.Workbook() 
-        ws=wb.active
-        ws.title= "Overview"
-        wb.create_sheet("2020") #expand to all seasons later
-        wb.save(os.getcwd()+"\\"+self.leagueName+ ".xlsx")
-            
-    def openExcel(self):
-        wb=xl.load_workbook(os.getcwd()+"\\"+self.leagueName+".xlsx")
-        wb.save(os.getcwd()+"\\"+self.leagueName+ ".xlsx")
 
     def writeScoreArray(self, year):
         arr= self.makeScoreArray(year)
@@ -251,10 +259,29 @@ class League(object):
     What to run with the -p flag
         @param: player: string of the player to perform the action on"""
     def dashPscript(self, player):
-        pass
+        playerRecord(player)
 
     def playerRecord(self, player):
-        pass
+        #Get Worksheet
+        wb=self.getWorkbook()
+        ws= wb["Overview"]
+        ws.cell(1,1).value= player 
+        #Get Player
+        mTeam=self.getmTeam(2020)
+        pl= self.player_dict.get(player)
+        owner= pl.longID
+        teams=mTeam.get('teams')
+        for team in teams:
+            if owner in team.get("owners"):
+                ovr= team.get("record").get("overall")
+                pl.wins= ovr.get("wins")
+                pl.losses= ovr.get("losses")
+                pl.ties= ovr.get("ties")
+                pl.ptsFor=ovr.get("pointsFor")
+                pl.ptsAginst=ovr.get("pointsAgainst")
+        ws.cell(2,1).value= "Record"
+        ws.cell(2,2).value= str(pl.wins)+ '-' + str(pl.losses)
+
     
 
 
