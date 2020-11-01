@@ -259,13 +259,14 @@ class League(object):
     What to run with the -p flag
         @param: player: string of the player to perform the action on"""
     def dashPscript(self, player):
-        playerRecord(player)
+        self.playerRecord(player)
 
     def playerRecord(self, player):
         #Get Worksheet
         wb=self.getWorkbook()
         ws= wb["Overview"]
         ws.cell(1,1).value= player 
+        #TODO Change Column width
         #Get Player
         mTeam=self.getmTeam(2020)
         pl= self.player_dict.get(player)
@@ -281,6 +282,7 @@ class League(object):
                 pl.ptsAginst=ovr.get("pointsAgainst")
         ws.cell(2,1).value= "Record"
         ws.cell(2,2).value= str(pl.wins)+ '-' + str(pl.losses)
+        wb.save(os.getcwd()+"\\"+self.leagueName+".xlsx")
 
     
 
