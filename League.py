@@ -254,6 +254,8 @@ class League(object):
         arr= self.makeScoreArray(year)
         wb=xl.load_workbook(os.getcwd()+"\\"+self.leagueName+".xlsx")
         ws=wb[str(year)]
+        #Make column dimension correct
+        ws.column_dimensions['A'].width= 20
         #Make Teams 
         for playerName in self.player_array:
             player= self.player_dict.get(playerName)
