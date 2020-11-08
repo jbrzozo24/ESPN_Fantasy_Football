@@ -198,8 +198,7 @@ class League(object):
     def translate(self, teamID):
         for entry in self.transArr:
             if entry[0] == teamID:
-                return entry[1]
-            
+                return entry[1]    
         print("No valid team!")
         
 #===================================================================================================================
@@ -246,7 +245,9 @@ class League(object):
             home= game.get('home')
             thisScores[self.translate(away.get('teamId'))][week]=away.get('totalPoints')
             thisScores[self.translate(home.get('teamId'))][week]=home.get('totalPoints')
-        print(thisScores)
+        for playerName in self.player_array:
+            player=self.player_dict.get(playerName)
+            player.scores=thisScores[self.translate(player.teamID)]
         return thisScores
 
     def writeScoreArray(self, year):
@@ -256,13 +257,26 @@ class League(object):
         #Make Teams 
         for playerName in self.player_array:
             player= self.player_dict.get(playerName)
-            ws.cell(player.teamID +1,1).value=playerName
+            ws.cell(self.translate(player.teamID) +1,1).value=playerName
         for i in range(len(arr)):
+            sum=0
+            count=0
             for j in range(len(arr[i])):
                 if i==1:
                     ws.cell(1, j+2).value="Week "+ str(j+1)
                 ws.cell(i+2,j+2).value=arr[i][j]
+                sum += arr[i][j]
+                if arr[i][j] != 0.0:
+                    count+=1
+            avg=sum/count
+            ws.cell(i+2, len(arr[0])+3).value= avg
+        ws.cell(1,len(arr[0])+3).value="Average"   
         wb.save(os.getcwd()+"\\"+self.leagueName+".xlsx")
+
+
+
+        
+
 
 
 #===================================================================================================================
