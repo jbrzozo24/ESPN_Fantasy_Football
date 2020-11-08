@@ -44,7 +44,7 @@ class League(object):
                 self.cookieFile.close()
         except:
             self.configNewCookies()
-
+        self.transArr=[]
         self.leagueName=''
         temp= self.configPlayers(2020)
         self.player_dict=temp[0]
@@ -179,14 +179,28 @@ class League(object):
         strings= string[:i+1] + string[i+1:].strip()
         return strings
 
+    #adds teamID to each player and creates the teamID to phyID translation array
     def linkTeamID(self):
         mBoxScore= self.getmBoxScore(2020)
         self.leagueName= mBoxScore.get('settings').get('name').replace(" ", "")
-        print('LeagueName: ' + self.leagueName)
+
+        i=0
+        #print('LeagueName: ' + self.leagueName)
         for team in mBoxScore.get('teams'):
             for owner in team.get('owners'):
-                print("This Owner: "+self.player_dict.get(owner).firstname+' '+self.player_dict.get(owner).lastname)
+                #print("This Owner: "+self.player_dict.get(owner).firstname+' '+self.player_dict.get(owner).lastname)
                 self.player_dict.get(owner).setteamID(team.get('id'))
+                self.player_dict.get(owner).setphyID(i)
+            self.transArr.append( [team.get('id'), i] )
+            i += 1
+        print(self.transArr)
+        
+    def translate(self, teamID):
+        for entry in self.transArr:
+            if entry[0] == teamID:
+                return entry[1]
+            
+        print("No valid team!")
         
 #===================================================================================================================
 # Excel Configuration Functions
@@ -221,7 +235,7 @@ class League(object):
     def makeScoreArray(self,year):
         mStandings=self.getmStandings(year)
         status=mStandings.get('status')
-        #make array of scores for the player
+        #make array of scores for the player 
         # print("teamsJoined: "+str(mStandings.get('teamsJoined')))
         # print("finalScoringPeriod: "+str(mStandings.get('finalScoringPeriod')))
         thisScores=np.zeros((status.get('teamsJoined'), status.get('finalScoringPeriod')))
@@ -230,8 +244,8 @@ class League(object):
             week= game.get('matchupPeriodId') - 1
             away= game.get('away')
             home= game.get('home')
-            thisScores[away.get('teamId')-1][week]=away.get('totalPoints')
-            thisScores[home.get('teamId')-1][week]=home.get('totalPoints')
+            thisScores[self.translate(away.get('teamId'))][week]=away.get('totalPoints')
+            thisScores[self.translate(home.get('teamId'))][week]=home.get('totalPoints')
         print(thisScores)
         return thisScores
 
