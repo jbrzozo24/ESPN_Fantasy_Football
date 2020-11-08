@@ -266,6 +266,9 @@ class League(object):
         wb=self.getWorkbook()
         ws= wb["Overview"]
         ws.cell(1,1).value= player 
+        ws.cell(1,2).value= "Wins"
+        ws.cell(1,3).value= "Losses"
+        ws.cell(1,4).value= "Ties"
         #TODO Change Column width
         #Get Player
         mTeam=self.getmTeam(2020)
@@ -281,7 +284,9 @@ class League(object):
                 pl.ptsFor=ovr.get("pointsFor")
                 pl.ptsAginst=ovr.get("pointsAgainst")
         ws.cell(2,1).value= "Record"
-        ws.cell(2,2).value= str(pl.wins)+ '-' + str(pl.losses)
+        ws.cell(2,2).value= str(pl.wins)
+        ws.cell(2,3).value= str(pl.losses)  
+        ws.cell(2,4).value= str(pl.ties)
         wb.save(os.getcwd()+"\\"+self.leagueName+".xlsx")
 
     

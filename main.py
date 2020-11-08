@@ -40,6 +40,9 @@ def main(argv,leagueID):
             league.dashPscript(arg) #Call the script for player specific data
         elif opt in ('-y', '--year'):
             assert type(arg) == int
+
+    #General script
+    league.writeScoreArray(2020)
             
 
 
