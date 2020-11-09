@@ -1,4 +1,4 @@
-import pandas
+import pandas as pd
 import requests
 import datetime 
 import os
@@ -193,7 +193,7 @@ class League(object):
                 self.player_dict.get(owner).setphyID(i)
             self.transArr.append( [team.get('id'), i] )
             i += 1
-        print(self.transArr)
+        
         
     def translate(self, teamID):
         for entry in self.transArr:
@@ -259,7 +259,7 @@ class League(object):
         #Make Teams 
         for playerName in self.player_array:
             player= self.player_dict.get(playerName)
-            ws.cell(self.translate(player.teamID) +1,1).value=playerName
+            ws.cell(self.translate(player.teamID) +2,1).value=playerName
         for i in range(len(arr)):
             sum=0
             count=0
@@ -274,8 +274,21 @@ class League(object):
             ws.cell(i+2, len(arr[0])+3).value= avg
         ws.cell(1,len(arr[0])+3).value="Average"   
         wb.save(os.getcwd()+"\\"+self.leagueName+".xlsx")
+        self.createLinechart(year, count, len(arr[0]))
 
-
+    def createLinechart(self, year, numrows, numcols):
+        wb=self.getWorkbook()
+        ws=wb[str(year)]
+        values = xl.chart.Reference(ws, min_col=2, min_row=2, max_col=2+numcols, max_row=2+numrows )
+        frame=pd.read_excel(".\\"+self.leagueName+".xlsx", sheet_name= str(year))
+        print(frame)
+        thischart = xl.chart.LineChart()
+        thischart.title="Scores vs. Week"
+        thischart.y_axis.title= "Points"
+        thischart.x_axis.title= "Weeks"
+        thischart.add_data(frame.T)
+        ws.add_chart(thischart,"B15")
+        wb.save(os.getcwd()+"\\"+self.leagueName+".xlsx")
 
         
 
