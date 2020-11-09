@@ -237,7 +237,8 @@ class League(object):
         #make array of scores for the player 
         # print("teamsJoined: "+str(mStandings.get('teamsJoined')))
         # print("finalScoringPeriod: "+str(mStandings.get('finalScoringPeriod')))
-        thisScores=np.zeros((status.get('teamsJoined'), status.get('finalScoringPeriod')))
+        finWk=status.get('finalScoringPeriod')
+        thisScores=np.zeros((status.get('teamsJoined'), finWk+ 6))
         schedule= mStandings.get("schedule")
         for game in schedule:
             week= game.get('matchupPeriodId') - 1
@@ -247,7 +248,19 @@ class League(object):
             thisScores[self.translate(home.get('teamId'))][week]=home.get('totalPoints')
         for playerName in self.player_array:
             player=self.player_dict.get(playerName)
-            player.scores=thisScores[self.translate(player.teamID)]
+            player.scores=thisScores[self.translate(player.teamID)][0:finWk]
+        
+        for row in thisScores:
+            row[finWk+1]= row[:finWk].max()         #Set Maximum Score
+            row[finWk+2]=row[0:finWk].sum()         #Set PointsFor
+            #Need to determine number of nonzero rows
+            nonzero= np.count_nonzero(row[:finWk])
+            row[finWk]= row[:nonzero].min()         #Set Minimum Score
+            #stub for points against
+            row[finWk+4]=row[:nonzero].mean()       #Set Average Score
+            row[finWk+5]=row[:nonzero].std()        #Set Standard Deviation
+
+        print(thisScores[0])
         return thisScores
 
     def writeScoreArray(self, year):
@@ -255,27 +268,39 @@ class League(object):
         wb=xl.load_workbook(os.getcwd()+"\\"+self.leagueName+".xlsx")
         ws=wb[str(year)]
         #Make column dimension correct
-        ws.column_dimensions['A'].width= 20
+        ws.column_dimensions['A'].width= 20 #Names
+        ws.column_dimensions['W'].width= 18 #Std Dev
+        ws.column_dimensions['V'].width= 12 #Average
+        ws.column_dimensions['U'].width= 12 #PtsAgainst
+        ws.column_dimensions['T'].width= 12 #PtsFor
+
         #Make Teams 
         for playerName in self.player_array:
             player= self.player_dict.get(playerName)
             ws.cell(self.translate(player.teamID) +2,1).value=playerName
         for i in range(len(arr)):
-            sum=0
-            count=0
+            # sum=0
+            # count=0
             for j in range(len(arr[i])):
                 if i==1:
                     ws.cell(1, j+2).value="Week "+ str(j+1)
                 ws.cell(i+2,j+2).value=arr[i][j]
-                sum += arr[i][j]
-                if arr[i][j] != 0.0:
-                    count+=1
-            avg=sum/count
-            ws.cell(i+2, len(arr[0])+3).value= avg
-        ws.cell(1,len(arr[0])+3).value="Average"   
+                # sum += arr[i][j]
+                # if arr[i][j] != 0.0:
+                #     count+=1
+            # avg=sum/count
+            # ws.cell(i+2, len(arr[0])+3).value= avg
+        ws.cell(1,18).value="Min"
+        ws.cell(1,19).value="Max"
+        ws.cell(1,20).value="PtsFor"
+        ws.cell(1,21).value="PtsAgainst"
+        ws.cell(1,22).value="Average" 
+        ws.cell(1,23).value="Standard Deviation"  
         wb.save(os.getcwd()+"\\"+self.leagueName+".xlsx")
-        self.createLinechart(year, count, len(arr[0]))
+        #self.createLinechart(year, count, len(arr[0]))
 
+
+    #NOT WORKING YET
     def createLinechart(self, year, numrows, numcols):
         wb=self.getWorkbook()
         ws=wb[str(year)]
@@ -286,7 +311,7 @@ class League(object):
         thischart.title="Scores vs. Week"
         thischart.y_axis.title= "Points"
         thischart.x_axis.title= "Weeks"
-        thischart.add_data(frame.T)
+        thischart.add_data(values)
         ws.add_chart(thischart,"B15")
         wb.save(os.getcwd()+"\\"+self.leagueName+".xlsx")
 
