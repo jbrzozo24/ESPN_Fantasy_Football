@@ -260,7 +260,6 @@ class League(object):
             row[finWk+4]=row[:nonzero].mean()       #Set Average Score
             row[finWk+5]=row[:nonzero].std()        #Set Standard Deviation
 
-        print(thisScores[0])
         return thisScores
 
     def writeScoreArray(self, year):
@@ -299,6 +298,10 @@ class League(object):
         wb.save(os.getcwd()+"\\"+self.leagueName+".xlsx")
         #self.createLinechart(year, count, len(arr[0]))
 
+    def getDataFrame(self, year):
+        frame= pd.read_excel(".\\"+self.leagueName+".xlsx", sheet_name= str(year))
+        return frame
+
 
     #NOT WORKING YET
     def createLinechart(self, year, numrows, numcols):
@@ -333,6 +336,7 @@ class League(object):
         #Get Worksheet
         wb=self.getWorkbook()
         ws= wb["Overview"]
+        ws.column_dimensions['A'].width = 20
         ws.cell(1,1).value= player 
         ws.cell(1,2).value= "Wins"
         ws.cell(1,3).value= "Losses"
@@ -352,9 +356,9 @@ class League(object):
                 pl.ptsFor=ovr.get("pointsFor")
                 pl.ptsAginst=ovr.get("pointsAgainst")
         ws.cell(2,1).value= "Record"
-        ws.cell(2,2).value= str(pl.wins)
-        ws.cell(2,3).value= str(pl.losses)  
-        ws.cell(2,4).value= str(pl.ties)
+        ws.cell(2,2).value= int(pl.wins)
+        ws.cell(2,3).value= int(pl.losses)  
+        ws.cell(2,4).value= int(pl.ties)
         wb.save(os.getcwd()+"\\"+self.leagueName+".xlsx")
 
     
